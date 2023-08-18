@@ -1,30 +1,40 @@
+
+@items = {"cup":2.30, "plate":4.70, "vase":6.85 }
+
 #Customer may enter their name at the start of the checkout process
-def get_name
+def get_name()
 	puts "Hello, welcome to Baratas Supermarket."
-	puts "Please key in your name."
-	@player_name = gets.chomp.upcase
-	puts "Welcome #{@player_name}!"
+	puts "Please fill in your name."
+	@customer_name = gets.chomp.upcase
+	puts "Welcome #{@customer_name}!"
 end
-puts get_name
+puts get_name()
 
 #Customer may enter multiple item prices (until the customer choose to finish entering prices of each item)
-def enter_prices
-	puts "Please enter the prices of each items."
-
+def key_in()
+	@sum = (0).round(2)
+	loop do
+		puts "Please enter the price of each item or '0' if you want to checkout."
+    	checkout = gets.to_f
+    	break if checkout == 0
+    	if checkout.class == Integer or Float
+    		@sum += checkout.round(2)
+    	else
+    		puts "Invalid price entered. Please enter a valid price."
+    	end
+    	puts "Total is #{@sum}."
+    end
 end
-puts enter_prices
+puts key_in()
 
 #Prices entered may only be either of Integer or Float data type only, anything else should throw a message to the customer asking them to reenter the prices.
-def wrong_enter
-
-end
-
 #Customer may enter a discount voucher code or skip it if they wish so
-def discount_voucher
-
+#If the voucher code is invalid, then tell the customer about it and let them reenter the voucher code, or skip the voucher code altogether. 
+def discount_voucher()
+	
 end
 
-#If the voucher code is invalid, then tell the customer about it and let them reenter the voucher code, or skip the voucher code altogether. Assume that the voucher code applies a fixed percentage discount to the total of purchase in all circumstances.
+#Assume that the voucher code applies a fixed percentage discount to the total of purchase in all circumstances.
 def invalid_voucher
 
 end
