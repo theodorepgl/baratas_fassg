@@ -1,62 +1,74 @@
+#ASSIGNMENT 1
 
-@items = {"cup":2.30, "plate":4.70, "vase":6.85 }
+@discount = { "JORDAN" => 0.9, "MAGIC" => 0.7, "BRYANT" => 0.5 }
+@product_price = { "NIKE" => 388.80, "PUMA" => 266.70, "ADIDAS" => 444.30 }
+@selected_items = []
+@counter = 0
 
-#Customer may enter their name at the start of the checkout process
-def get_name()
-	puts "Hello, welcome to Baratas Supermarket."
-	puts "Please fill in your name."
-	@customer_name = gets.chomp.upcase
-	puts "Welcome #{@customer_name}!"
+def name_part
+	puts "Hello, Welcome to Baratas Supermarket!" 
+	puts "Please fill in your name to proceed."
+	customer_name = gets.chomp.upcase
+	puts "Hello, Mr/Miss #{customer_name}."
 end
-puts get_name()
 
-#Customer may enter multiple item prices (until the customer choose to finish entering prices of each item)
-def key_in()
-	@sum = (0).round(2)
+def items_part
+	puts "Items on SALES now: "
+	@product_price.each {|key, value| puts "#{key}"}
+end
+
+def prices_part
+	puts "Select the items: "
+	while @item = gets.chomp
+		case @item
+		when @item == "0", "PUMA", "NIKE", "ADIDAS" 
+			puts "The price of the selected item #{@item} is #{@product_price[@item]} USD."
+		    break
+		else
+			puts "Item not available, please choose again."
+		end	
+	end
+end
+
+def addon_part
+	puts "Press 'y' if want to add more items."
+	puts "or press any button proceed to discount section."
+    @continuing = gets.chomp.downcase
+end
+
+def selected_part
+	@selected_items << @item
+	puts "Your Selected Items are #{@selected_items}"
+	@counter += @product_price[@item]     
+	puts "Total net amount: #{@counter} USD."
+end
+
+def discount_part
+	puts "Please enter voucher code provide to try your luck."
+	puts "JORDAN , MAGIC , BRYANT"
+	while @discount_code = gets.chomp
+		case @discount_code
+		when @discount_code == "0", "JORDAN", "MAGIC", "BRYANT" 
+			@after_discount = @counter * @discount[@discount_code]
+		    puts "Total amount to pay: #{@after_discount.round(2)} USD."
+		    puts "Discount code applied: #{@discount_code}, #{@discount[@discount_code]}"
+		    break
+		else
+			puts "WRONG CODE, please fill in the right code."
+		end	
+	end
+end
+
+def payment_part(total_amount)
 	loop do
-		puts "Please enter the price of each item or '0' if you want to checkout."
-    	checkout = gets.to_f
-    	break if checkout == 0
-    	if checkout.class == Integer or Float
-    		@sum += checkout.round(2)
-    	else
-    		puts "Invalid price entered. Please enter a valid price."
-    	end
-    	puts "Total is #{@sum}."
+ 	puts "Please enter cash"
+ 	@payment = gets.chomp.to_f
+ 	break if @payment >= total_amount
+    puts "Insufficient amount. Please check the total amount to pay."
     end
-end
-puts key_in()
-
-#Prices entered may only be either of Integer or Float data type only, anything else should throw a message to the customer asking them to reenter the prices.
-#Customer may enter a discount voucher code or skip it if they wish so
-#If the voucher code is invalid, then tell the customer about it and let them reenter the voucher code, or skip the voucher code altogether. 
-def discount_voucher()
-	
-end
-
-#Assume that the voucher code applies a fixed percentage discount to the total of purchase in all circumstances.
-def invalid_voucher
-
-end
-
-#The end price should be shown together with the voucher code applied (if any), and how much discount (in percentage was applied).
-def total_discount
-
-end
-
-#Customers will enter the amount to be paid in cash into the system. Again, the amount to be paid must either only be in Integer or Float.
-def total_amount
-
-end
-
-#If the amount paid is equal or greater than the final amount displayed, then finish the transaction by greeting ‘Thanks’ (or anything equivalent) to the customer together with the change (if any).
-def balance_count
-
-end
-
-#If the amount paid is less than the final amount displayed, then ask the customer to re-enter the amount until they enter an amount equal or greater than the displayed final amount.
-def invalid_payment
-
+    balance = @payment - total_amount
+    puts "Your change is:" "#{balance.round(2)} USD."
+    puts "Thank you for shopping with Baratas Supermarket!"
 end
 
 def count_down
@@ -78,4 +90,17 @@ def count_down
 	puts message4 
 	puts message5
 end
-#uts count_down
+
+loop do
+	name_part
+	items_part
+	loop do
+		prices_part
+		selected_part
+	    addon_part
+		break if @continuing != "y"	
+	end
+	discount_part
+	payment_part(@after_discount)
+	count_down
+end
